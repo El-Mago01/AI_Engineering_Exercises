@@ -1,0 +1,124 @@
+:root {
+  color-scheme: light;
+  --bg: #f6efe6;
+  --card: #fffaf4;
+  --ink: #1f2933;
+  --muted: #6b7280;
+  --accent: #b45309;
+  --accent-soft: #fde7c7;
+  --border: #ecd9c2;
+  --error-bg: #fef2f2;
+  --error-ink: #991b1b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top left, #fff8ef, transparent 30%),
+    linear-gradient(180deg, #f6efe6 0%, #efe4d3 100%);
+  color: var(--ink);
+}
+
+.page-shell {
+  width: min(1080px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 48px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 14px 40px rgba(120, 76, 24, 0.08);
+  padding: 24px;
+}
+
+.hero-card {
+  margin-bottom: 20px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+}
+
+h1, h2 {
+  margin-top: 0;
+}
+
+.intro,
+.empty-state {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.study-form {
+  display: grid;
+  gap: 12px;
+}
+
+label {
+  font-weight: 700;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.92;
+}
+
+.message.error {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: var(--error-bg);
+  color: var(--error-ink);
+  border-radius: 12px;
+}
+
+.result-output {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  margin: 0;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask AI Study Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="card hero-card">
+        <p class="eyebrow">AI Engineering With Flask</p>
+        <h1>Study Assistant</h1>
+        <p class="intro">
+          Enter a topic, choose a study mode, and inspect how your Flask app turns
+          that request into study support.
+        </p>
+      </section>
+
+      <section class="grid">
+        <section class="card form-card">
+          <h2>Ask for study help</h2>
+          <form method="post" class="study-form">
+            <label for="topic">Topic</label>
+            <input
+              id="topic"
+              name="topic"
+              type="text"
+              value="{{ topic }}"
+              placeholder="e.g. Flask routes, SQL joins, photosynthesis"
+            >
+
+            <label for="mode">Mode</label>
+            <select id="mode" name="mode">
+              <option value="quiz" {% if mode == "quiz" %}selected{% endif %}>Quiz questions</option>
+              <option value="summary" {% if mode == "summary" %}selected{% endif %}>Summary</option>
+              <option value="plan" {% if mode == "plan" %}selected{% endif %}>Study plan</option>
+            </select>
+
+            <button type="submit">Generate study help</button>
+          </form>
+
+          {% if error %}
+          <div class="message error">{{ error }}</div>
+          {% endif %}
+        </section>
+
+        <section class="card result-card">
+          <h2>Assistant output</h2>
+          {% if result %}
+          <pre class="result-output">{{ result }}</pre>
+          {% else %}
+          <p class="empty-state">
+            Your result will appear here after you submit a topic.
+          </p>
+          {% endif %}
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+[project]
+name = "llm-observability-demo-langfuse"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "langfuse>=4.13.2",
+    "openai>=2.44.0",
+    "python-dotenv>=1.2.2",
+    "rich>=15.0.0",
+]
