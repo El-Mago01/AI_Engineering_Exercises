@@ -4,7 +4,7 @@ from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
-SOURCE = Path("docs/returns_policy.md_")
+SOURCE = Path("docs/returns_policy.md")
 
 def clean_text(text: str) -> str:
     useful_lines = []
@@ -20,6 +20,8 @@ def load_documents():
     documents = TextLoader(str(SOURCE), encoding="utf-8").load()
 
     documents = TextLoader(str(SOURCE), encoding="utf-8").load()
+    if len(documents) == 0:
+        raise "No documents loaded"
     for document in documents:
         document.page_content = clean_text(document.page_content)
         document.metadata.update(
@@ -43,6 +45,7 @@ def split_documents(documents, chunk_size: int = 260, chunk_overlap: int = 40):
     )
     for index, chunk in enumerate(chunks, start=1):
         chunk.metadata["chunk_id"] = f"returns-{index:02d}"
+        chunk.metadata["source"] = SOURCE.name
     return chunks
 
 

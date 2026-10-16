@@ -187,8 +187,8 @@ def write_jsonl(output_path, records):
 
 def main():
     """Build records from docs and write chunks.jsonl."""
-    records = build_records(Path("docs"))
-    write_jsonl(Path("chunks.jsonl"), records)
+    records = build_records(Path("../docs"))
+    write_jsonl(Path("../chunks.jsonl"), records)
     print(f"Wrote {len(records)} records to chunks.jsonl")
 
 

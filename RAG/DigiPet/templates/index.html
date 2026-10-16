@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DigiPet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="playmat">
+    <p class="playmat-title">DIGIPET</p>
+    <p class="playmat-hint">Your digital pet companion</p>
+
+    <article class="device" aria-label="DigiPet virtual pet device">
+      <div class="device-screw device-screw--tl" aria-hidden="true"></div>
+      <div class="device-screw device-screw--tr" aria-hidden="true"></div>
+      <div class="device-screw device-screw--bl" aria-hidden="true"></div>
+      <div class="device-screw device-screw--br" aria-hidden="true"></div>
+
+      <div class="device-strap-hole" aria-hidden="true"></div>
+      <p class="device-logo">DIGI<span>PET</span></p>
+
+      <div class="lcd-frame">
+        <div class="lcd-screen" id="lcd-screen" aria-live="polite">
+          <div class="lcd-grid" aria-hidden="true"></div>
+          <div class="lcd-glare" aria-hidden="true"></div>
+
+          <div class="lcd-viewport">
+            <div class="lcd-pet-zone">
+              <div id="pet-sprite" class="pet-sprite" role="img" aria-label="DigiPet">🐣</div>
+              <p id="pet-name" class="pet-name">DigiPet</p>
+              <p id="pet-mood" class="pet-mood">booting…</p>
+              <p id="care-toast" class="care-toast" aria-live="polite"></p>
+            </div>
+
+            <div class="lcd-chat-zone" aria-label="Chat with DigiPet">
+              <p id="pet-bubble" class="pet-bubble">&gt; press TALK when ready_</p>
+              <form id="talk-form" class="talk-form" autocomplete="off">
+                <input
+                  id="talk-input"
+                  class="talk-input"
+                  type="text"
+                  name="message"
+                  maxlength="240"
+                  placeholder="type here..."
+                  aria-label="Message to DigiPet"
+                />
+                <button type="submit" id="btn-talk" class="talk-btn">TALK</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="lcd-stats" aria-label="Pet care levels">
+            <p class="stats-caption">CARE</p>
+            <div class="stat-row">
+              <span class="stat-tag" title="Food care level" aria-label="Food care level">&#127830;</span>
+              <div class="pixel-bar" title="Food level"><div id="bar-hunger" class="pixel-bar-fill pixel-bar-fill--hun"></div></div>
+              <span id="val-hunger" class="stat-num">00</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-tag" title="Water care level" aria-label="Water care level">&#128167;</span>
+              <div class="pixel-bar" title="Water level"><div id="bar-thirst" class="pixel-bar-fill pixel-bar-fill--wet"></div></div>
+              <span id="val-thirst" class="stat-num">00</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-tag" title="Fun care level" aria-label="Fun care level">&#9733;</span>
+              <div class="pixel-bar" title="Fun level"><div id="bar-boredom" class="pixel-bar-fill pixel-bar-fill--fun"></div></div>
+              <span id="val-boredom" class="stat-num">00</span>
+            </div>
+          </div>
+        </div>
+        <p class="lcd-label">● REC</p>
+      </div>
+
+      <div class="device-controls">
+        <button type="button" id="btn-feed" class="toy-btn toy-btn--feed" title="Feed">
+          <span class="toy-btn-icon" aria-hidden="true">◆</span>
+          <span class="toy-btn-label">FEED</span>
+        </button>
+        <button type="button" id="btn-water" class="toy-btn toy-btn--water" title="Give water">
+          <span class="toy-btn-icon" aria-hidden="true">◇</span>
+          <span class="toy-btn-label">H2O</span>
+        </button>
+        <button type="button" id="btn-play" class="toy-btn toy-btn--play" title="Play">
+          <span class="toy-btn-icon" aria-hidden="true">★</span>
+          <span class="toy-btn-label">PLAY</span>
+        </button>
+      </div>
+    </article>
+
+    <p id="status" class="status" role="status"></p>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

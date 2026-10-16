@@ -1,0 +1,23 @@
+[
+  {
+    "id": "uk-leave",
+    "text": "UK employees receive 25 days annual leave.",
+    "source": "leave.md",
+    "category": "leave",
+    "region": "UK"
+  },
+  {
+    "id": "us-pto",
+    "text": "US employees accrue paid time off monthly.",
+    "source": "pto.md",
+    "category": "leave",
+    "region": "US"
+  },
+  {
+    "id": "vpn",
+    "text": "Use the company VPN on public networks.",
+    "source": "security.md",
+    "category": "security",
+    "region": "ALL"
+  }
+]

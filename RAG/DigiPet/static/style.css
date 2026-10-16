@@ -1,0 +1,499 @@
+/* Tamagotchi / virtual-pet toy aesthetic — plastic shell + pixel LCD */
+
+:root {
+  --plastic-light: #f4c4e8;
+  --plastic-mid: #e89fd0;
+  --plastic-dark: #c96faa;
+  --plastic-shadow: #8a4578;
+  --lcd-bg: #2a4533;
+  --lcd-bg-deep: #1a2e22;
+  --lcd-pixel: #8fd464;
+  --lcd-pixel-dim: #5a9e42;
+  --lcd-alert: #ff6b6b;
+  --btn-feed: #ff9f43;
+  --btn-water: #54a0ff;
+  --btn-play: #ff6b81;
+  --font-lcd: "VT323", "Courier New", monospace;
+  --font-brand: "Press Start 2P", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  font-family: var(--font-lcd);
+  color: var(--lcd-pixel);
+  background:
+    radial-gradient(circle at 20% 10%, #3d2a52 0%, transparent 45%),
+    radial-gradient(circle at 80% 90%, #1e3a5f 0%, transparent 40%),
+    repeating-linear-gradient(
+      0deg,
+      #1a1520 0px,
+      #1a1520 2px,
+      #151018 2px,
+      #151018 4px
+    );
+}
+
+.playmat {
+  text-align: center;
+  width: 100%;
+  max-width: 35rem;
+}
+
+.playmat-title {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  color: #c9b8d9;
+  text-shadow: 0 2px 0 #2a1f35;
+}
+
+.playmat-hint {
+  margin: 0.5rem 0 1.25rem;
+  font-size: 1.1rem;
+  color: #7a6b8a;
+  letter-spacing: 0.06em;
+}
+
+/* —— Plastic egg shell —— */
+.device {
+  position: relative;
+  margin: 0 auto;
+  padding: 1.75rem 3rem 1.35rem;
+  width: min(100%, 31rem);
+  border-radius: 46% 46% 40% 40% / 52% 52% 44% 44%;
+  background:
+    linear-gradient(165deg, var(--plastic-light) 0%, var(--plastic-mid) 42%, var(--plastic-dark) 100%);
+  box-shadow:
+    inset 0 3px 8px rgba(255, 255, 255, 0.45),
+    inset 0 -6px 14px rgba(0, 0, 0, 0.12),
+    0 14px 28px rgba(0, 0, 0, 0.45),
+    0 4px 0 var(--plastic-shadow);
+  border: 3px solid rgba(255, 255, 255, 0.25);
+}
+
+.device-screw {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ddd, #666 70%);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  opacity: 0.7;
+}
+
+.device-screw--tl { top: 14%; left: 10%; }
+.device-screw--tr { top: 14%; right: 10%; }
+.device-screw--bl { bottom: 22%; left: 9%; }
+.device-screw--br { bottom: 22%; right: 9%; }
+
+.device-strap-hole {
+  width: 2.1rem;
+  height: 0.55rem;
+  margin: 0 auto 0.5rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #3a2548 0%, #1a1020 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.device-logo {
+  margin: 0 0 0.65rem;
+  font-family: var(--font-brand);
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  color: #fff;
+  text-shadow:
+    0 1px 0 var(--plastic-shadow),
+    0 0 12px rgba(255, 255, 255, 0.35);
+}
+
+.device-logo span {
+  color: #ffeaa7;
+}
+
+/* —— Recessed LCD bezel —— */
+.lcd-frame {
+  position: relative;
+  padding: 0.45rem;
+  border-radius: 0.65rem;
+  background: linear-gradient(180deg, #4a3558 0%, #2d2238 100%);
+  box-shadow:
+    inset 0 3px 6px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.lcd-label {
+  position: absolute;
+  right: 0.55rem;
+  bottom: 0.35rem;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--lcd-alert);
+  opacity: 0.85;
+  animation: rec-blink 1.4s step-end infinite;
+}
+
+@keyframes rec-blink {
+  50% { opacity: 0.2; }
+}
+
+.lcd-screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.35rem;
+  background: var(--lcd-bg-deep);
+  border: 3px solid #0d1610;
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.55);
+}
+
+.lcd-screen.mood-struggling {
+  animation: lcd-worry 0.35s step-end infinite;
+}
+
+@keyframes lcd-worry {
+  50% { filter: brightness(0.85); }
+}
+
+.lcd-grid {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 0, 0, 0.15) 3px,
+      rgba(0, 0, 0, 0.15) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 0, 0, 0.1) 3px,
+      rgba(0, 0, 0, 0.1) 4px
+    );
+  z-index: 2;
+}
+
+.lcd-glare {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 38%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent);
+  z-index: 3;
+}
+
+.lcd-viewport {
+  position: relative;
+  z-index: 1;
+  padding: 0.75rem 0.55rem 0.4rem;
+  text-align: center;
+  background: var(--lcd-bg);
+}
+
+.lcd-pet-zone {
+  padding-bottom: 0.35rem;
+}
+
+.lcd-chat-zone {
+  margin-top: 0.15rem;
+  padding-top: 0.45rem;
+  border-top: 2px dashed rgba(143, 212, 100, 0.25);
+}
+
+.pet-sprite {
+  margin: 0;
+  font-size: 4.25rem;
+  line-height: 1;
+  filter: contrast(1.1) saturate(1.15);
+  image-rendering: pixelated;
+}
+
+.pet-sprite.bounce {
+  animation: pet-hop 0.4s steps(4, end);
+}
+
+.pet-sprite[data-action="feed"] {
+  animation: pet-munch 0.28s steps(2, end) infinite;
+}
+
+.pet-sprite[data-action="give-water"] {
+  animation: pet-sip 0.55s ease-in-out infinite;
+}
+
+.pet-sprite[data-action="play-with"] {
+  animation: pet-hop 0.32s steps(3, end) infinite;
+}
+
+@keyframes pet-hop {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-8px); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes pet-munch {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.08) rotate(-6deg); }
+}
+
+@keyframes pet-sip {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px) scale(0.96); }
+}
+
+.pet-name {
+  margin: 0.35rem 0 0;
+  font-size: 1.35rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lcd-pixel);
+  text-shadow: 0 0 8px rgba(143, 212, 100, 0.35);
+}
+
+.pet-mood {
+  margin: 0.1rem 0 0;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  color: var(--lcd-pixel-dim);
+}
+
+.care-toast {
+  margin: 0.35rem 0 0;
+  min-height: 1.15rem;
+  font-size: 0.95rem;
+  color: var(--lcd-pixel-dim);
+  letter-spacing: 0.04em;
+}
+
+.pet-bubble {
+  margin: 0;
+  padding: 0.45rem 0.5rem;
+  min-height: 3.25rem;
+  max-height: 5.5rem;
+  overflow-y: auto;
+  font-size: 1.1rem;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--lcd-pixel);
+  border: 2px solid rgba(143, 212, 100, 0.5);
+  background: rgba(0, 0, 0, 0.28);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.pet-bubble.thinking {
+  color: var(--lcd-pixel-dim);
+  animation: bubble-blink 0.8s step-end infinite;
+}
+
+@keyframes bubble-blink {
+  50% { opacity: 0.45; }
+}
+
+.talk-form {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+}
+
+.talk-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.35rem 0.45rem;
+  font-family: var(--font-lcd);
+  font-size: 1.1rem;
+  color: var(--lcd-pixel);
+  background: rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(143, 212, 100, 0.35);
+  border-radius: 0.2rem;
+}
+
+.talk-input::placeholder {
+  color: var(--lcd-pixel-dim);
+  opacity: 0.8;
+}
+
+.talk-input:focus {
+  outline: none;
+  border-color: var(--lcd-pixel);
+  box-shadow: 0 0 0 2px rgba(143, 212, 100, 0.25);
+}
+
+.talk-btn {
+  flex-shrink: 0;
+  padding: 0.35rem 0.55rem;
+  font-family: var(--font-brand);
+  font-size: 0.42rem;
+  letter-spacing: 0.06em;
+  color: #1a2e10;
+  background: linear-gradient(180deg, #c8f0a0, var(--lcd-pixel));
+  border: 2px solid #0d1610;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+.talk-btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.talk-btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.talk-btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+/* —— Pixel stat bars inside LCD —— */
+.lcd-stats {
+  position: relative;
+  z-index: 1;
+  padding: 0.4rem 0.5rem 0.55rem;
+  background: var(--lcd-bg-deep);
+  border-top: 2px solid rgba(0, 0, 0, 0.35);
+}
+
+.stats-caption {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  color: var(--lcd-pixel-dim);
+  letter-spacing: 0.08em;
+  text-align: left;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 2.7rem 1fr 2rem;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.3rem;
+}
+
+.stat-row:last-child {
+  margin-bottom: 0;
+}
+
+.stat-tag {
+  font-size: 1rem;
+  color: var(--lcd-pixel-dim);
+  letter-spacing: 0.05em;
+}
+
+.pixel-bar {
+  height: 0.65rem;
+  background: rgba(0, 0, 0, 0.45);
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.pixel-bar-fill {
+  height: 100%;
+  width: 0%;
+  transition: width 0.35s steps(8, end);
+  box-shadow: 0 0 6px currentColor;
+}
+
+.pixel-bar-fill--hun { background: var(--lcd-pixel); color: var(--lcd-pixel); }
+.pixel-bar-fill--wet { background: #6ec8ff; color: #6ec8ff; }
+.pixel-bar-fill--fun { background: #ffd86b; color: #ffd86b; }
+
+.stat-num {
+  font-size: 1.15rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--lcd-pixel);
+}
+
+/* —— Chunky toy buttons —— */
+.device-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-top: 0.85rem;
+  padding: 0 0.25rem;
+}
+
+.toy-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  width: 3.6rem;
+  padding: 0.45rem 0.25rem 0.35rem;
+  border: none;
+  border-radius: 50% 50% 45% 45% / 55% 55% 40% 40%;
+  cursor: pointer;
+  font-family: var(--font-brand);
+  font-size: 0.35rem;
+  letter-spacing: 0.04em;
+  color: #2d1f10;
+  box-shadow:
+    inset 0 3px 4px rgba(255, 255, 255, 0.55),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.2),
+    0 5px 0 rgba(0, 0, 0, 0.28),
+    0 7px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.toy-btn-icon {
+  font-size: 0.65rem;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+.toy-btn-label {
+  font-size: 0.38rem;
+}
+
+.toy-btn--feed { background: linear-gradient(180deg, #ffd59a, var(--btn-feed)); }
+.toy-btn--water { background: linear-gradient(180deg, #9fd4ff, var(--btn-water)); }
+.toy-btn--play { background: linear-gradient(180deg, #ffb3c0, var(--btn-play)); }
+
+.toy-btn:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.toy-btn:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.25),
+    0 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.toy-btn:disabled {
+  opacity: 0.45;
+  cursor: wait;
+  transform: none;
+}
+
+.status {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #8a7a9a;
+  min-height: 1.4rem;
+  letter-spacing: 0.04em;
+}
+
+.status.error {
+  color: var(--lcd-alert);
+}
+
+.status.ok {
+  color: #8fd464;
+}
