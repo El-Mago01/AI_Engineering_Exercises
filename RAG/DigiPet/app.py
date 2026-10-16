@@ -12,13 +12,13 @@ SUPPORT_DIR = BASE_DIR / ".guides" / "scripts"
 if str(SUPPORT_DIR) not in sys.path:
     sys.path.insert(0, str(SUPPORT_DIR))
 
+
 from pet_chat import PetChat
 from pet_store import PetStore
 
 app = Flask(__name__)
 store = PetStore(BASE_DIR / "data" / "digipet.sqlite3")
 chat = PetChat(BASE_DIR)
-
 
 def stats_payload(pet):
     """Convert stored pet stats into JSON-ready data."""

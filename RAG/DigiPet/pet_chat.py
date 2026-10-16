@@ -5,7 +5,11 @@ from pet_support import FALLBACK, MIN_SCORE, TOP_K
 from pet_support import is_stats_question, similarity_score
 import os
 
-
+ID = "record_id"
+SOURCE = "source"
+EMBEDDING = "embedding"
+TEXT = "text"
+SCORE = "score"
 class PetChat:
     """Own the lore index, retrieval, grounding, generation, and history."""
 
@@ -26,6 +30,10 @@ class PetChat:
 
         return sorted(supported_files)
 
+    # def print_records(self):
+    #     for record in self.records:
+    #         print(f"{record[ID]} - {record[SOURCE]} -  {record.get(SCORE, 'no score'')} - {record[TEXT]:15d} - {record[EMBEDDING]:.2f}")
+
     def __create_combined_list(self, meta_data:list, vector_data:list)->list:
         if len(meta_data) != len(vector_data):
             raise ValueError("Length of meta_data and vector_data do not match.")
@@ -34,7 +42,7 @@ class PetChat:
         for id, chunk, filename in meta_data:
             print (index, id, chunk, filename)
             chunk = {
-                "record_id": id,
+                "id": id,
                 "text": chunk,
                 "source": filename,
                 "embedding": vector_data[index],
@@ -73,6 +81,25 @@ class PetChat:
 
     def retrieve(self, query, top_k=TOP_K, threshold=MIN_SCORE):
         """Return transparent lore evidence ranked by meaning."""
+
+        if top_k < 1:
+            raise ValueError("top_k must be at least 1")
+        self.print_records()
+
+        query_vector = self.embedder(query)
+        useful_records = []
+
+        for record in records:
+            score = similarity_score(query_vector, record["vector"])
+            if score >= threshold and matches_filters(record, filters):
+                # keep this result
+                record['score'] = score
+                useful_records.append(record)
+        if not useful_records:
+            return []
+        useful_records = sorted(useful_records, key=lambda x: x["score"], reverse=True)
+
+        return useful_records[:top_k]
         return []
 
     def build_grounded_prompt(self, stats, evidence):
