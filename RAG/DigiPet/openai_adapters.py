@@ -16,7 +16,7 @@ class OpenAIEmbedder:
             self.client = OpenAI()
         response = self.client.embeddings.create(
         model="text-embedding-3-small",
-            input=list(texts),
+            input=texts,
         )
         return [item.embedding for item in response.data]
 

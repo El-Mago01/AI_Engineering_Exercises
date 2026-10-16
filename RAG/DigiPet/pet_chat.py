@@ -5,7 +5,7 @@ from pet_support import FALLBACK, MIN_SCORE, TOP_K
 from pet_support import is_stats_question, similarity_score
 import os
 
-ID = "record_id"
+ID = "id"
 SOURCE = "source"
 EMBEDDING = "embedding"
 TEXT = "text"
@@ -15,7 +15,7 @@ class PetChat:
 
     def __init__(self, base_dir, embedder=None, generator=None):
         self.base_dir = base_dir
-        self.embedder = embedder or OpenAIEmbedder()
+        self.embedder = embedder or OpenAIEmbedder() # if an own embedder is provided: use it. Otherwise, use create an OpenAIEmbedder() instance
         self.generator = generator or OpenAIGenerator()
         self.records = self.load_lore(base_dir / "lore")
         self.history = []
@@ -30,9 +30,15 @@ class PetChat:
 
         return sorted(supported_files)
 
-    # def print_records(self):
-    #     for record in self.records:
-    #         print(f"{record[ID]} - {record[SOURCE]} -  {record.get(SCORE, 'no score'')} - {record[TEXT]:15d} - {record[EMBEDDING]:.2f}")
+    def print_records(self,other_records=None):
+        if other_records:
+            for record in other_records:
+                print(f"{record[ID]} - {record[SOURCE]} - {record.get(SCORE, 'no score')} - {record[TEXT]}")
+            return
+        for record in self.records:
+            # print(f"{record[ID]} - {record[SOURCE]} -  {record.get(SCORE, 'no score')} - {record[TEXT]:15d} ")
+            print(f"{record[ID]} - {record[SOURCE]} - {record.get(SCORE, 'no score')} - {record[TEXT]}")
+
 
     def __create_combined_list(self, meta_data:list, vector_data:list)->list:
         if len(meta_data) != len(vector_data):
@@ -42,10 +48,11 @@ class PetChat:
         for id, chunk, filename in meta_data:
             print (index, id, chunk, filename)
             chunk = {
-                "id": id,
-                "text": chunk,
-                "source": filename,
-                "embedding": vector_data[index],
+                ID: id,
+                TEXT: chunk,
+                SOURCE: filename,
+                SCORE: 0.8,
+                EMBEDDING: vector_data[index],
             }
             chunks.append(chunk)
             index += 1
@@ -76,31 +83,33 @@ class PetChat:
         text_chunks = [chunk for id, chunk, filename in chunks]
         vector_chunk_list = self.embedder.embed(text_chunks)
         joined_chunks = self.__create_combined_list(chunks, vector_chunk_list)
-        print(joined_chunks)
+        # print(joined_chunks)
         return joined_chunks
 
     def retrieve(self, query, top_k=TOP_K, threshold=MIN_SCORE):
         """Return transparent lore evidence ranked by meaning."""
-
+        print("XXXXXXXXXXXXXXXX",query, top_k, threshold)
         if top_k < 1:
             raise ValueError("top_k must be at least 1")
-        self.print_records()
 
-        query_vector = self.embedder(query)
+        query_vector = self.embedder.embed(query)
+        if len(query_vector) != 1:
+            raise ValueError("Vector for the chat input text must have exactly 1 element.")
+        query_vector = query_vector[0]
         useful_records = []
 
-        for record in records:
-            score = similarity_score(query_vector, record["vector"])
-            if score >= threshold and matches_filters(record, filters):
+        for record in self.records:
+            score = similarity_score(query_vector, record[EMBEDDING])
+            if score >= threshold:
                 # keep this result
-                record['score'] = score
+                record[SCORE] = score
                 useful_records.append(record)
         if not useful_records:
             return []
-        useful_records = sorted(useful_records, key=lambda x: x["score"], reverse=True)
+        useful_records = sorted(useful_records, key=lambda x: x[SCORE], reverse=True)
+        self.print_records(useful_records[:top_k])
 
         return useful_records[:top_k]
-        return []
 
     def build_grounded_prompt(self, stats, evidence):
         """Combine live pet stats with retrieved lore."""
@@ -108,6 +117,7 @@ class PetChat:
 
     def reply(self, user_message, stats):
         """Return one grounded reply for the Flask talk route."""
+        top_records = self.retrieve(user_message)
         return FALLBACK
 
     def reset_history(self):
