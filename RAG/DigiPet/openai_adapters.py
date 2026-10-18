@@ -33,7 +33,7 @@ class OpenAIGenerator:
 
         messages = [{"role": "system", "content": system_prompt}]
         for role, content in history:
-            messages.append({"role": role, "content": content})
+            # messages.append({"role": role, "content": content})
             messages.append({"role": "user", "content": user_message})
             response = self.client.responses.create(
                 model="gpt-4.1-mini",

@@ -72,11 +72,11 @@ def api_talk():
     stats = stats_payload(store.get_stats())
     try:
         reply = chat.reply(message, stats)
-    except Exception:
+    except Exception as e:
         app.logger.exception("DigiPet reply failed")
         return jsonify({
             "error": "reply failed",
-            "reply": "DigiPet had trouble answering. Try again.",
+            "reply": f"DigiPet had trouble answering. Try again.  {e}",
             "message": message,
             "stats": stats,
         }), 500

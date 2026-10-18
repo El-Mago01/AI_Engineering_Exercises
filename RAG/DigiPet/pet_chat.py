@@ -10,6 +10,10 @@ SOURCE = "source"
 EMBEDDING = "embedding"
 TEXT = "text"
 SCORE = "score"
+
+GREETING_ONLY = [
+    "hi", "hello", "bye", "good evening", "good morning", "good afternoon", "good night", "see you", "talk to you later"
+]
 class PetChat:
     """Own the lore index, retrieval, grounding, generation, and history."""
 
@@ -88,7 +92,6 @@ class PetChat:
 
     def retrieve(self, query, top_k=TOP_K, threshold=MIN_SCORE):
         """Return transparent lore evidence ranked by meaning."""
-        print("XXXXXXXXXXXXXXXX",query, top_k, threshold)
         if top_k < 1:
             raise ValueError("top_k must be at least 1")
 
@@ -103,7 +106,12 @@ class PetChat:
             if score >= threshold:
                 # keep this result
                 record[SCORE] = score
-                useful_records.append(record)
+                useful_records.append({
+                    "id": record["id"],
+                    "text": record["text"],
+                    "source": record["source"],
+                    "score": score
+                })
         if not useful_records:
             return []
         useful_records = sorted(useful_records, key=lambda x: x[SCORE], reverse=True)
@@ -113,12 +121,86 @@ class PetChat:
 
     def build_grounded_prompt(self, stats, evidence):
         """Combine live pet stats with retrieved lore."""
-        return ""
+        if not evidence:
+            is_stats_question = True
+        else:
+            is_stats_question = False
+        message = f"""
+            You are a cute and funny digital pet called DigiPet that can speak and you get questions via a chat-box. 
+            As a pet you have a certain mood, which is based upon 3 statistical values: hunger, thirst and boredom. 
+            If the mood is low (a value higher than 75), 
+            you need to check in the statistical values to find out what it is you need. If your have hunger, 
+            you need food, if you are thirsty, you need water, if you are bored, you need to play. A combination 
+            of this can be possible and should be checked. 
+            
+            STATISTICAL VALUES:
+            You mood: {stats.get("mood","")}
+            hunger: {stats.get("hunger","")}
+            thirst: {stats.get("thirst","")}
+            boredom: {stats.get("boredom","")}
+            
+            Note, a value lower than 50 is positive, a value higher than 75 is negative. For example, a hunger-level of
+            means that the pet is hungry. Also a thirst level of 90 means that the pet is very thirsty.
+            THIS IS IMPORTANT, NEVER INVENT NUMBERS OR MISSING FACTS. USE THE FALLBACK SENTENCE WHEN SOMETHING IS MISSING
+            FOR EXAMPLE, WHEN THERE IS NOT ENOUGH EVIDENCE:
+            
+            THE FALLBACK SENTENCE:
+            {FALLBACK}
+        """
+        if is_stats_question:
+            message += """
+                In this case, the care-taker asked a question related to your mood, so please look at his question and
+                answer accordingly. For example, if your mood is "needs care", and your low on water, you say that you 
+                are 'thirsty' and that you 'please want some water'. If your mood is good, you say that you are happy and
+                don't have any urgent needs. You tell your care-taker a joke, or you tell him something funny.
+            """
+        else:
+            if not isinstance(evidence, list):
+                raise TypeError("evidence must be a list of dictionaries")
+            if len(evidence) == 0:
+                message_evidence = f"""
+                YOU MUST REPLY TO THE CARE-TAKE THE FOLLOWING EXACT LINE:
+                {FALLBACK}
+                """
+            else:
+                message_evidence = f"""Please ground your answer on the following evidences. If the evidence is weak, 
+                please the following exact phrase:
+                '{FALLBACK}'. """
+                for item in evidence:
+                    if not isinstance(item, dict):
+                        raise TypeError("evidence must be a list of dictionaries")
+                    message_evidence += f"{item.get(TEXT, '')} with evidence strength: {item[SCORE]}"
+                message += f"""
+                    In this case, the care-taker asked a question related to something else. Carefully analyze the question 
+                    and follow the guidelines provided below:
+                    
+                    GUIDELINES:
+                    {message_evidence}
+                    The evidence is low, when it is below 0.25
+                """
+        print(message)
+        return message
 
     def reply(self, user_message, stats):
         """Return one grounded reply for the Flask talk route."""
-        top_records = self.retrieve(user_message)
-        return FALLBACK
+        print(user_message)
+        for greeting in GREETING_ONLY:
+            if user_message in greeting:
+                return user_message
+        if is_stats_question(user_message): #The case of authoritative live statistics
+            prompt = self.build_grounded_prompt(stats, None)
+        else:
+            top_records = self.retrieve(user_message)
+            if len(top_records) == 0:
+                return FALLBACK
+            prompt = self.build_grounded_prompt(stats, top_records)
+        self.store_history("user", user_message)
+        reply_message = self.generator.generate(prompt, self.history, user_message )
+        self.store_history("assistant", reply_message)
+        return reply_message
 
     def reset_history(self):
         self.history.clear()
+
+    def store_history(self, user, message):
+        self.history.append((user, message))
