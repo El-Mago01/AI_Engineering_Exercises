@@ -1,0 +1,36 @@
+{
+  "events": {
+    "EVT-101": {
+      "name": "Developer Community Meetup",
+      "date": "2026-08-12",
+      "expected_attendees": 75,
+      "venue_id": "VEN-A",
+      "required_equipment": [
+        "projector",
+        "wifi",
+        "wireless microphone"
+      ]
+    },
+    "EVT-102": {
+      "name": "Design Systems Workshop",
+      "date": "2026-08-15",
+      "expected_attendees": 32,
+      "venue_id": "VEN-B",
+      "required_equipment": [
+        "projector",
+        "wifi",
+        "wireless microphone"
+      ]
+    },
+    "EVT-103": {
+      "name": "Community Technology Forum",
+      "date": "2026-08-20",
+      "expected_attendees": 140,
+      "venue_id": "VEN-A",
+      "required_equipment": [
+        "projector",
+        "wifi"
+      ]
+    }
+  }
+}

@@ -21,25 +21,54 @@ Layer 1: RAG pipeline (embed → store → retrieve → generate)
 from pypdf import PdfReader
 import math
 import requests
+from openai import OpenAI
+import os
+from dotenv import load_dotenv
+load_dotenv()  # Load environment variables from .env file
 
+api_key = os.environ.get("OPENAI_API_KEY")
 OLLAMA_HOST = "http://192.168.1.75:11434"  # change this
 # EMBED_MODEL = "hf.co/bartowski/gemma-1.1-2b-it-GGUF:latest"  # or qwen3:8b etc.
 EMBED_MODEL = "nomic-embed-text"
 LLM_MODEL = "hf.co/bartowski/gemma-1.1-2b-it-GGUF:latest"  # you can use the same or pick qwen3:8b
 
 
+client = OpenAI(api_key=api_key)
 
+EMBED_MODEL = "text-embedding-3-small"
+CHAT_MODEL = "gpt-4.1-mini"  # or another model you have access to
 
 def embed(text: str):
-    url = f"{OLLAMA_HOST}/api/embed"
-    payload = {
-        "model": EMBED_MODEL,
-        "input": text,
-    }
-    resp = requests.post(url, json=payload)
-    resp.raise_for_status()
-    data = resp.json()
-    return data["embeddings"][0]  # this should be a list[float]
+    resp = client.embeddings.create(
+        model=EMBED_MODEL,
+        input=text,
+    )
+    return resp.data[0].embedding  # list[float]
+
+def generate_answer(question: str, contexts: list[str]) -> str:
+    context_text = "\n\n---\n\n".join(contexts)
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "Je bent een behulpzame assistent. Beantwoord vragen ALLEEN op basis van de gegeven context. "
+                "Als het antwoord niet in de context staat, zeg dan dat je het niet weet."
+            ),
+        },
+        {
+            "role": "user",
+            "content": (
+                f"Context:\n{context_text}\n\n"
+                f"Vraag: {question}\n\n"
+                "Please give me a short line in English of what this training is so that I can add it in my CV."
+            ),
+        },
+    ]
+    resp = client.chat.completions.create(
+        model=CHAT_MODEL,
+        messages=messages,
+    )
+    return resp.choices[0].message.content
 
 
 def load_pdf_text(path):
@@ -117,48 +146,7 @@ def build_vector_store(chunks):
 def cosine(a, b):
     return sum(x*y for x, y in zip(a, b))
 
-def generate_answer(question: str, contexts: list[str]) -> str:
-    url = f"{OLLAMA_HOST.rstrip('/')}/api/chat"
 
-    system_prompt = (
-        "You are a helpful assistant that answers questions using ONLY the provided context. "
-        "If the answer is not in the context, say you don't know."
-    )
-
-    context_text = "\n\n---\n\n".join(
-        context.strip() for context in contexts if context and context.strip()
-    )
-
-    if not context_text:
-        return "I don't know—the provided context is empty."
-
-    print("The prompt send to the chat LLM:", context_text)
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {
-            "role": "user",
-            "content": (
-                f"Context:\n{context_text}\n\n"
-                f"Question: {question}\n\n"
-                "Answer clearly based only on the context."
-            ),
-        },
-    ]
-
-    payload = {
-        "model": LLM_MODEL,
-        "messages": messages,
-        "stream": False,
-    }
-
-    resp = requests.post(url, json=payload, timeout=300)
-    print("URL:", resp.url)
-    print("Status:", resp.status_code)
-    print("Body:", resp.text[:1000])
-    resp.raise_for_status()
-    data = resp.json()
-
-    return data["message"]["content"]
 
 def retrieve(query, store, k=5):
     q_vec = embed(query)
@@ -215,14 +203,15 @@ At a high level, we’ll do this:
 """
 
 if __name__ == "__main__":
-    pdf_path = "docs/opleidingsgids_zijnscoaching.pdf"  # change this
+    pdf_path = "../docs/opleidingsgids_zijnscoaching.pdf"  # change this
     text = load_pdf_text(pdf_path)
     print(len(text))  # preview first 2000 chars
     chunks = chunk_text(text, chunk_size=800)
     print(f"Got {len(chunks)} chunks")
 
     store = build_vector_store(chunks)
-    question = "Waar gaat deze training over?"
+    question = ("I have done this training from 2020 - 2021. Please give me a few lines so that I create a CV entry "
+                "in English regarding this training")
     top = retrieve(question, store, k=5)
     for score, chunk, _ in top:
         print("SCORE:", score)

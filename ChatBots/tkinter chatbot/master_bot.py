@@ -6,10 +6,13 @@ from setup import (
     create_and_insert_bot_frame
 )
 from openai import OpenAI
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 # Initialize the OpenAI client with the API key
 api_key = os.getenv("OPENAI_API_KEY")
-
+print(api_key)
 client = OpenAI(api_key=api_key)
 
 def send(event=None):

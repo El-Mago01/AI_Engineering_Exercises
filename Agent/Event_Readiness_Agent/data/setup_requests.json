@@ -1,0 +1,40 @@
+{
+  "requests": [
+    {
+      "request_id": "REQ-001",
+      "event_id": "EVT-102",
+      "issues": "EVT-102: ['wireless microphone'], True ",
+      "status": "open"
+    },
+    {
+      "request_id": "REQ-002",
+      "event_id": "EVT-103",
+      "issues": "EVT-103: [], False ",
+      "status": "open"
+    },
+    {
+      "request_id": "REQ-003",
+      "event_id": "EVT-103",
+      "issues": "EVT-103: [], Capacity issue: There are 140 attendees and the venue capacity is for 100 attendees ",
+      "status": "open"
+    },
+    {
+      "request_id": "REQ-004",
+      "event_id": "EVT-103",
+      "issues": "EVT-103: [], Capacity issue: There are 140 attendees and the venue capacity is for 100 attendees ",
+      "status": "open"
+    },
+    {
+      "request_id": "REQ-005",
+      "event_id": "EVT-102",
+      "issues": "EVT-102: Equipment missing issue: The following equipments are missing: ['wireless microphone'], No capacity issue ",
+      "status": "open"
+    },
+    {
+      "request_id": "REQ-006",
+      "event_id": "EVT-102",
+      "issues": "EVT-102: Equipment missing issue: The following equipments are missing: ['wireless microphone'], No capacity issue ",
+      "status": "open"
+    }
+  ]
+}

@@ -123,7 +123,7 @@ At a high level, we’ll do this:
 """
 
 if __name__ == "__main__":
-    pdf_path = "docs/opleidingsgids_zijnscoaching.pdf"  # change this
+    pdf_path = "../docs/opleidingsgids_zijnscoaching.pdf"  # change this
     text = load_pdf_text(pdf_path)
     print(len(text))  # preview first 2000 chars
     chunks = chunk_text(text, chunk_size=500)

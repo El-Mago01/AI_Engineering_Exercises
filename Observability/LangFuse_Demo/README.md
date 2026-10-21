@@ -9,7 +9,7 @@ tailored to the user's request.
 ## Setup
 
 1. Install [uv](https://docs.astral.sh/uv/).
-2. Create a `.env` file with your OpenAI API key:
+2. Create a `../../ChatBots/PythonSupportBot/.env` file with your OpenAI API key:
 
    ```
    OPENAI_API_KEY=sk-...
@@ -32,4 +32,4 @@ Technology used:
 - RAG
 - vector distance calculations
 - embeddings
-- 
+- Showing the stats from AI answer

@@ -1,3 +1,8 @@
+"""
+This is an exercise from maestro using openAI
+using history
+"""
+
 import os
 import json
 from openai import OpenAI
@@ -18,7 +23,10 @@ def chat_with_ai(message:str) -> str:
     return response.choices[0].message.content
 
 def main():
-    history = "Let's get your hands on a real OpenAI API call, step by step To start, I want to quickly check where your setup is: Are you working in your own local environment (like VS Code / terminal), or just inside the Maestro code editor right now? Do you already have an OpenAI API key created from the OpenAI dashboard? (Yes/No is enough — don’t paste the key.) Reply with: Local + Yes Local + No Maestro only + Yes Maestro only + No ”"
+    history = ("Let's get your hands on a real OpenAI API call, step by step To start, I want to quickly check where "
+               "your setup is: Are you working in your own local environment (like VS Code / terminal), or just inside "
+               "the Maestro code editor right now? Do you already have an OpenAI API key created from the OpenAI dashboard? "
+               "(Yes/No is enough — don’t paste the key.) Reply with: Local + Yes Local + No Maestro only + Yes Maestro only + No ”")
     answer = chat_with_ai(history)
     print(answer)
 

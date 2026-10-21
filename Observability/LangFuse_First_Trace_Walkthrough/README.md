@@ -1,0 +1,11 @@
+Repository: AI_Engineering_Exercises/Observability/LangFuse-First-Trace-Walkthrough
+- First use of LangFuse tracing
+- Use of LangChain to connect a prompt template to a model call so LangFuse can trace
+- PipeLine: prepare messages -> call model -> return result
+- Full flow: user chooses ticket -> LangChain app -> model call -> LangFuse trace -> dashboard inspection
+- Use of following modules:
+  - from langchain_core.prompts import ChatPromptTemplate
+  - from langchain_openai import ChatOpenAI
+- Use of LangChain to send a prompt
+- Use of LangFuse to analyze the call. Call is visible at : cloud.langfuse.com under the name of "LangFuse Walkthrough Ticket"
+- 

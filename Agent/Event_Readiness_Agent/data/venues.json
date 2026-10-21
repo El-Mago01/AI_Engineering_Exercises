@@ -1,0 +1,23 @@
+{
+  "venues": {
+    "VEN-A": {
+      "name": "Riverside Hall",
+      "capacity": 100,
+      "available_equipment": [
+        "projector",
+        "wifi",
+        "wireless microphone",
+        "lectern"
+      ]
+    },
+    "VEN-B": {
+      "name": "Studio Two",
+      "capacity": 40,
+      "available_equipment": [
+        "projector",
+        "wifi",
+        "whiteboard"
+      ]
+    }
+  }
+}

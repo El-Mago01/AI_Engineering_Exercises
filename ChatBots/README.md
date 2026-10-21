@@ -1,0 +1,9 @@
+- SDK (Software Development Kit) for connection with openAI, in cli_bot.py and maestro_exercise.py
+- chat history collection and chat history summarization
+- openAI key within the PyCharm run configuration
+- System, Assistant and User role for prompt engineering
+- A little chatbot implemented in a GUI using tkinter
+- AI returning a json
+- Uses model gpt-4o-mini
+- temperature and max_tokens parameters
+- Using RAG pipeline with openai

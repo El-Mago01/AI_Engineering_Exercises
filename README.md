@@ -1,17 +1,6 @@
 This project uses the following technology:
-- SDK (Software Development Kit) for connection with openAI, in cli_bot.py and maestro_exercise.py
-- chat history collection and chat history summarization
-- openAI key within the PyCharm run configuration
-- System, Assistant and User role for prompt engineering
+
 - AI returning a json
 - Showing the stats from AI answer
-- Uses model gpt-4o-mini
-- temperature and max_tokens parameters
-- Using RAG pipeline with openai
-- using a RAG pipeline with a local LLM - ollama
-- using a RAG pipeline with a home-made-silly- embedding function
-- in dir. RAG-Use cosine to find distance between vectors
-- in dir. RAG. building a vector space
-- in dir. RAG-Using file name split or filename split 
-- in dir. RAG-Use AI-embedding with openAI model 'text-embedding-3-small'
+
 - jsonl files, each line is a complete json object

@@ -1,3 +1,10 @@
+"""
+This minimum agent, uses 1 tool to check the status of GitHub and was established within the
+online session from Slawa Gladkov on 22.10 to get awareness of agentic SW..
+
+
+"""
+
 import json
 import requests
 from pathlib import Path
@@ -33,7 +40,8 @@ TOOLS: list[FunctionToolParam] = [
     {
         "type": "function",
         "name": "get_github_status",
-        "description": "Get Github's current operational status Use this when the user asks about GitHub's current availability",
+        "description": "Get Github's current operational status Use this when the user asks about "
+                       "GitHub's current availability",
         "parameters": {
             "type": "object",
             "properties": {},
@@ -49,7 +57,8 @@ question = "Is GitHub operative right now?"
 
 response = client.responses.create(
     model="gpt-5-mini",
-    instructions = "Answer briefly and accurately, Use the available tool when current GitHub status information is required",
+    instructions = "Answer briefly and accurately, Use the available tool when current GitHub status "
+                   "information is required",
     input = question,
     tools = TOOLS,
     stream=False,
@@ -68,10 +77,12 @@ tool_result = None
 print("Tool call is: ", tool_call.name)
 if tool_call is None:
     print("The model did not select a tool.")
+
 elif tool_call.name == "get_github_status":
     print(f"Selected tool: {tool_call.name}")
     tool_result = get_github_status()
     print(f"Tool result: {tool_result}")
+
 else:
     print(f"Tool not permitted: {tool_call.name}")
 
