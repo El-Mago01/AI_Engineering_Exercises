@@ -9,7 +9,7 @@ import json
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
-from event_tools import DEFAULT_CONTEXT, ToolContext, dispatch, load_json
+from event_tools import DEFAULT_CONTEXT, ToolContext, dispatch, load_json, tool_result
 
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
@@ -133,14 +133,23 @@ def run_agent(
         for call in function_calls:
             if tool_call_count >= max_tool_calls:
                 break
+            step = tool_call_count
+            tool_call_count += 1
             try:
                 arguments = json.loads(call.arguments)
             except (TypeError, json.JSONDecodeError):
                 arguments = None
 
-            result = dispatch(call.name, arguments, context)
+            try:
+                result = dispatch(call.name, arguments, context)
+            except Exception:
+                result = tool_result(
+                    ok=False,
+                    code="tool_error",
+                    message="The tool could not be executed.",
+                )
             trace.append({
-                "step": tool_call_count,
+                "step": step,
                 "tool": call.name,
                 "arguments": arguments,
                 "result": result["code"],
@@ -150,13 +159,13 @@ def run_agent(
                 "call_id": call.call_id,
                 "output": json.dumps(result),
             })
-            tool_call_count += 1
 
     return {
-    "status": "stopped",
-    "answer": f"The agent stopped after {max_tool_calls} tool calls.",
-    "trace": trace,
+        "status": "stopped",
+        "answer": f"The agent stopped after {max_tool_calls} tool calls.",
+        "trace": trace,
     }
+
 
 def show_demo_data() -> None:
     """Print the supplied events so the starter can be explored offline."""

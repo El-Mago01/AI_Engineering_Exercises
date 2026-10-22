@@ -90,55 +90,53 @@ def get_event_details(
     context: ToolContext = DEFAULT_CONTEXT,
 ) -> dict:
     """Return event and venue details for a known event."""
-    # : Validates the ID, load both data files, and return a result dictionary.
-    events = load_json(context.events_path).get("events", {})
-    venues = load_json(context.venues_path).get("venues", {})
     try:
-        event_id = validate_event_id(event_id)
-    except ValueError as e:
-        tool_result(
+        normalized = validate_event_id(event_id)
+    except (TypeError, ValueError):
+        return tool_result(
             ok=False,
             code="invalid_event_id",
-            message="Provided event_id invalid",
-            data=None
+            message="The event_id must match EVT- followed by exactly three digits.",
         )
 
-    if event_id not in events.keys():
+    events = load_json(context.events_path).get("events", {})
+    venues = load_json(context.venues_path).get("venues", {})
+    event = events.get(normalized)
+    if event is None:
         return tool_result(
             ok=False,
-            code="event_id_not_available",
-            message="Provided event_id is not present in DB",
-            data=None
+            code="event_not_found",
+            message=f"Event {normalized} was not found.",
         )
-    event_details = events[event_id]
-    venue_id = event_details.get("venue_id","")
-    if venue_id == "":
+
+    venue_id = event.get("venue_id")
+    if not venue_id:
         return tool_result(
             ok=False,
-            code="venue_id_not_found_in_event_db",
-            message="No venue_id not stored in event.json",
-            data=None
+            code="venue_not_found",
+            message=f"Event {normalized} has no assigned venue.",
         )
-    venue_details = venues.get(venue_id,{})
-    if venue_details == {}:
+
+    venue = venues.get(venue_id)
+    if venue is None:
         return tool_result(
             ok=False,
-            code="venue_id_not_found_in_venues_db",
-            message="venue_id not found in venues.json",
-            data=None
+            code="venue_not_found",
+            message=f"Venue {venue_id} was not found.",
         )
+
     return tool_result(
-            ok=True,
-            code="event_details_returned",
-            message="All event details returned",
-            data={
-                "event_id": event_id,
-                **event_details,
-                "venue_name": venue_details.get("name",""),
-                "venue_capacity": venue_details.get("capacity",""),
-                "available_equipment": venue_details.get("available_equipment","")
-            }
-        )
+        ok=True,
+        code="event_found",
+        message="Event details loaded.",
+        data={
+            "event_id": normalized,
+            **event,
+            "venue_name": venue.get("name", ""),
+            "venue_capacity": venue.get("capacity", ""),
+            "available_equipment": venue.get("available_equipment", []),
+        },
+    )
 
 
 def check_event_readiness(
@@ -146,64 +144,28 @@ def check_event_readiness(
     context: ToolContext = DEFAULT_CONTEXT,
 ) -> dict:
     """Check venue capacity and equipment for an event."""
-    # Compares attendance and equipment with the assigned venue.
-    event_details = get_event_details(event_id, context)
-    if not event_details.get("ok",""):
-        return tool_result(
-            ok=False,
-            code="event_details_not_found",
-            message="Could not get event details",
-            data={
-                "event_id": event_id,
-                "capacity_ok": False,
-                "missing_equipment": [],
-                "ready": False
-            }
-        )
-    if not event_details.get("data","").get("available_equipment",""):
-        return tool_result(
-            ok=False,
-            code="missing_equipment",
-            message="available_equipment field not present",
-            data={
-                "event_id": event_id,
-                "capacity_ok": False,
-                "missing_equipment": [],
-                "ready": False
-            }
-        )
-        return event_details
-    if not event_details.get("data").get("expected_attendees",""):
-        return tool_result(
-            ok=False,
-            code="expected_attendees_field_missing_in_returned_data",
-            message="expected_attendees field not present",
-            data={
-                "event_id": event_id,
-                "capacity_ok": False,
-                "missing_equipment": [],
-                "ready": False
-            }
-        )
+    details_result = get_event_details(event_id, context)
+    if not details_result["ok"]:
+        return details_result
 
-    capacity_ok = (
-            event_details["data"]["expected_attendees"] <= event_details["data"]["venue_capacity"])
-    available_equipment = set(event_details["data"]["available_equipment"])
+    details = details_result["data"]
+    capacity_ok = details["expected_attendees"] <= details["venue_capacity"]
+    available_equipment = set(details["available_equipment"])
     missing_equipment = [
         item
-        for item in event_details["data"]["required_equipment"]
+        for item in details["required_equipment"]
         if item not in available_equipment
     ]
     return tool_result(
-        ok=capacity_ok and not missing_equipment,
-        code="result_of_readiness_check",
-        message="result of readiness check",
+        ok=True,
+        code="readiness_checked",
+        message="Event readiness checked.",
         data={
-            "event_id": event_id,
+            "event_id": details["event_id"],
             "capacity_ok": capacity_ok,
             "missing_equipment": missing_equipment,
-            "ready": capacity_ok and not missing_equipment
-        }
+            "ready": capacity_ok and not missing_equipment,
+        },
     )
 
 
@@ -215,51 +177,76 @@ def create_setup_request(
     create_setup_request writes to data/setup_requests.json. Before writing,
     it must calculate the current readiness result and show the exact issues to the operator."""
     readiness = check_event_readiness(event_id, context)
-    if readiness["data"]["ready"]:
-        tool_result(
-            ok=True,
-            code="readiness_ok_no_setup_needed",
-            message="No setup request is needed",
-            data={
-                **readiness["data"],
-            }
-        )
-    capacity_ok = readiness["data"]['capacity_ok']
-    missing_equipment = readiness["data"]['missing_equipment']
-    if capacity_ok:
-        capacity_issue = "No capacity issue"
-    else:
-        if "expected_attendees" not in readiness["data"] or "venue_capacity" not in readiness["data"]:
-            capacity_issue = "There is a capacity issue, exact numbers are missing"
-        else:
-            expected_attendees = readiness["data"]["expected_attendees"]
-            venue_capacity = readiness["data"]["venue_capacity"]
-            capacity_issue = f"Capacity issue: There are {expected_attendees} attendees and the venue capacity is for {venue_capacity} attendees"
-    if not missing_equipment:
-        missing_equipment_issue = "No equipment issue"
-    else:
-        missing_equipment_issue = f"Equipment missing issue: The following equipments are missing: {missing_equipment}"
+    if not readiness["ok"]:
+        return readiness
 
-    summary=f"{readiness["data"]['event_id']}: {missing_equipment_issue}, {capacity_issue} "
+    if readiness["data"]["ready"]:
+        return tool_result(
+            ok=False,
+            code="event_already_ready",
+            message="No setup request is needed.",
+            data=readiness["data"],
+        )
+
+    readiness_data = readiness["data"]
+    requests = load_json(context.requests_path)
+    if not isinstance(requests.get("requests"), list):
+        return tool_result(
+            ok=False,
+            code="storage_error",
+            message="The setup request file is invalid.",
+            data=None,
+        )
+
+    existing_open_request = next(
+        (
+            request
+            for request in requests["requests"]
+            if isinstance(request, dict)
+            and request.get("event_id") == readiness_data["event_id"]
+            and request.get("status") == "open"
+        ),
+        None,
+    )
+    if existing_open_request is not None:
+        return tool_result(
+            ok=False,
+            code="duplicate_open_request",
+            message="An open setup request already exists for this event.",
+            data=existing_open_request,
+        )
+
+    details_result = get_event_details(event_id, context)
+    if not details_result["ok"]:
+        return details_result
+
+    details = details_result["data"]
+    issues = []
+    if not readiness_data["capacity_ok"]:
+        issues.append(
+            "capacity too low: "
+            f"{details['expected_attendees']} expected attendees; "
+            f"venue capacity {details['venue_capacity']}"
+        )
+    if readiness_data["missing_equipment"]:
+        issues.append(
+            "missing equipment: "
+            + ", ".join(readiness_data["missing_equipment"])
+        )
+
+    summary = f"{readiness_data['event_id']}: " + "; ".join(issues)
 
     if not context.approval_callback(summary):
         return tool_result(
             ok=False,
             code="approval_rejected",
             message="The setup request was not created.",
-            data={}
+            data=None,
         )
-    requests = load_json(context.requests_path)
-    if not "requests" in requests.keys() or not isinstance(requests["requests"], list):
-        return tool_result(
-            ok=False,
-            code="storage_error",
-            message="The json file for requests is corrupted",
-            data={}
-        )
+
     request = {
         "request_id": f"REQ-{len(requests["requests"]) + 1:03d}",
-        "event_id": readiness["data"]["event_id"],
+        "event_id": readiness_data["event_id"],
         "issues": summary,
         "status": "open",
     }
@@ -270,16 +257,16 @@ def create_setup_request(
     )
     return tool_result(
         ok=True,
-        code="result_of_readiness_check",
-        message="result of readiness check",
+        code="setup_request_created",
+        message="The setup request was created.",
         data={
-            "event_id": event_id,
-            "capacity_ok": capacity_ok,
-            "request_id" : request["request_id"],
-            "missing_equipment": missing_equipment,
-            "ready": False
-        }
+            "request_id": request["request_id"],
+            "event_id": readiness_data["event_id"],
+            "issues": summary,
+            "status": "open",
+        },
     )
+
 
 TOOL_REGISTRY = {
     "get_event_details": {
@@ -309,8 +296,8 @@ def validate_call(name: str, arguments: dict) -> dict:
     if not isinstance(arguments, dict):
         return tool_result(
             False,
-            "unknown_tool",
-            "The requested tool is not allowed.",
+            "invalid_arguments",
+            "Tool arguments must be an object.",
         )
     if set(arguments) != {"event_id"}:
         return tool_result(
@@ -320,40 +307,47 @@ def validate_call(name: str, arguments: dict) -> dict:
         )
     try:
         event_id = validate_event_id(arguments["event_id"])
-    except ValueError:
+    except (TypeError, ValueError):
         return tool_result(
             False,
-            "unknown_tool",
-            "The requested tool has invalid arguments (invalid event_id).",
+            "invalid_event_id",
+            "The event_id must match EVT- followed by exactly three digits.",
         )
     return tool_result(
         ok=True,
-        code="OK",
-        message="The tool is validated",
-        data={"event_id": event_id,
-              "ready" : True},
+        code="call_validated",
+        message="The tool call is valid.",
+        data={"event_id": event_id},
     )
+
 
 def dispatch(
     name: str,
     arguments: dict,
     context: ToolContext = DEFAULT_CONTEXT,
 ) -> dict:
-    """Validate and execute one allowed and listed tool call.
-    The dispatcher is the single entry point between a model-proposed call and a local Python function.
-    """
+    """Validate and execute one allowed and listed tool call."""
     validated_call = validate_call(name, arguments)
-    if not validated_call.get("ok", False) or not validated_call.get("data", {}):
+    if not validated_call["ok"]:
         return validated_call
     spec = TOOL_REGISTRY[name]
 
-    return spec["handler"](
-        validated_call["data"]["event_id"],
-        context,
-)
+    try:
+        return spec["handler"](
+            validated_call["data"]["event_id"],
+            context,
+        )
+    except Exception:
+        return tool_result(
+            ok=False,
+            code="tool_error",
+            message="The tool could not be executed.",
+        )
+
 
 def main():
     get_event_details("evt-101")
+
 
 if __name__ == "__main__":
     main()
