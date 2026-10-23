@@ -1,0 +1,78 @@
+{
+  "images": {
+    "red-bicycle.png": {
+      "label": "red bicycle by a wall",
+      "vector": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "cat-blue-chair.png": {
+      "label": "sleeping cat on a blue chair",
+      "vector": [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    "beach-sunset.png": {
+      "label": "beach at sunset",
+      "vector": [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    "coffee-books.png": {
+      "label": "coffee beside books",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  },
+  "text_queries": {
+    "bicycle": [
+      0.95,
+      0.05,
+      0.0,
+      0.0
+    ],
+    "cat": [
+      0.0,
+      0.95,
+      0.05,
+      0.0
+    ],
+    "sleeping": [
+      0.0,
+      0.95,
+      0.05,
+      0.0
+    ],
+    "beach": [
+      0.0,
+      0.0,
+      0.95,
+      0.05
+    ],
+    "coffee": [
+      0.0,
+      0.0,
+      0.05,
+      0.95
+    ],
+    "default": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ]
+  }
+}

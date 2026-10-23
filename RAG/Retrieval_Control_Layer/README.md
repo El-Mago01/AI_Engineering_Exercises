@@ -1,1 +1,2 @@
 - Using RAG with both a semantic filter and a key-based filter
+- Use cosine to find distance between vectors #vector_similarity #vector #cosine

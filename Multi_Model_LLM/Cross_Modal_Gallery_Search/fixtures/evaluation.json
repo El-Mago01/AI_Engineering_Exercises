@@ -1,0 +1,18 @@
+[
+  {
+    "query": "a red bicycle",
+    "expected": "red-bicycle.png"
+  },
+  {
+    "query": "a sleeping cat",
+    "expected": "cat-blue-chair.png"
+  },
+  {
+    "query": "a beach at sunset",
+    "expected": "beach-sunset.png"
+  },
+  {
+    "query": "coffee and books",
+    "expected": "coffee-books.png"
+  }
+]
