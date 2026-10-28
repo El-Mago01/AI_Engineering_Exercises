@@ -2,6 +2,7 @@ from openai import OpenAI
 from pet_support import FALLBACK
 from dotenv import load_dotenv
 import os
+import datetime
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 
@@ -14,10 +15,14 @@ class OpenAIEmbedder:
     def embed(self, texts):
         if self.client is None:
             self.client = OpenAI()
+        dt1 = datetime.datetime.now()
         response = self.client.embeddings.create(
         model="text-embedding-3-small",
             input=texts,
         )
+        dt2 = datetime.datetime.now()
+        print(dt2 - dt1)
+        print(texts)
         return [item.embedding for item in response.data]
 
 

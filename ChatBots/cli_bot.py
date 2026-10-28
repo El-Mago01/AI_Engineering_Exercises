@@ -1,14 +1,16 @@
 import os
 import json
 from openai import OpenAI
+from dotenv import load_dotenv
+load_dotenv()
 
 api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
 
-MAX_SUMMARY_LENGTH = 2000
+MAX_SUMMARY_LENGTH = 2000 # Max length of a summarized history
 MAX_HISTORY_LENGTH = 2 # number of chats in the history, excluding the new chat
 
-def get_system_dict() -> dict:
+def get_system_message() -> dict:
     system_prompt = """
     Role : You are a CLI assistant that answers user questions.
     Constraints: 
@@ -122,8 +124,8 @@ def main():
     # messages[1] contains chat summary
     # messages[2..n] contains the recent chat history
     messages = []
-    system_dict = get_system_dict()
-    messages.append(system_dict)
+    system_message = get_system_message()
+    messages.append(system_message)
     messages.append({"role": "assistant", "content": ""})
     while True:
         chat_line = input(">>> ")

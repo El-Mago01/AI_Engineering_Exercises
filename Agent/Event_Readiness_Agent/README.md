@@ -1,3 +1,15 @@
 Within Event_Readiness_Agent I encountered the following learnings:
 - merging the fields of 2 dicts (in file event_tools.py) using event**, where event is a dict. All fields auto copied in result
 - A more thorough tooling configuration #TOOLS #TOOLING
+- working with tools definition, defining 3 tools
+- stopping rule for agent
+- parsing arguments / parameters for command line (CLI) #options
+- fixed chain and bounded agent (MAX_TOOL_CALLS)
+- add trace to the agent
+- working with json files (json.load)
+- lambda expression in test_event_tools.py
+- dispatch functionality for tools for the agent
+- Validate the tools-call from the agent
+- working with a tool registry
+- working with an aligned tool result. Each tool returns in the same format
+- 

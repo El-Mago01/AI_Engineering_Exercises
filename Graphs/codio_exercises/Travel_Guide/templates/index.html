@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Travel Planning Agent Team</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+        <path d="M19 35c-5-7-8-12-8-17a13 13 0 0 1 26 0c0 5-3 10-8 17l-5 7-5-7Z"/>
+        <circle cx="24" cy="18" r="4"/>
+        <path class="route" d="M5 39c8-5 13 2 21-2 6-3 9-1 17 3"/>
+      </svg>
+      <div><strong>Travel Planning</strong><span>Agent operations desk</span></div>
+    </div>
+    <span class="live-label">LangGraph team</span>
+  </header>
+
+  <main class="page-shell">
+    <section class="control-panel">
+      <div>
+        <p class="eyebrow">Travel case</p>
+        <h1>Create a verified travel plan</h1>
+        <p>Select a disruption. Three tool-using agents investigate it before the coordinator responds.</p>
+      </div>
+      <form method="post" id="plan-form">
+        <label for="case_id">Case</label>
+        <div class="form-row">
+          <select id="case_id" name="case_id">
+            {% for case_id, item in cases.items() %}
+            <option value="{{ case_id }}" {% if case_id == selected %}selected{% endif %}>{{ item.title }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit" id="submit-button">Create travel plan</button>
+        </div>
+        <p class="progress" id="progress" hidden>Agents are checking live evidence. This can take a moment.</p>
+      </form>
+    </section>
+
+    {% if error %}<div class="error-panel" role="alert">{{ error }}</div>{% endif %}
+
+    <section class="case-card">
+      <div><span>Destination</span><strong>{{ case.destination }}</strong></div>
+      <div><span>Disruption</span><strong>{{ case.disruption }}</strong></div>
+      <div><span>Request</span><strong>{{ case.request }}</strong></div>
+    </section>
+
+    <section>
+      <div class="section-heading"><div><p class="eyebrow">Specialists</p><h2>Agent findings</h2></div></div>
+      <div class="agent-grid">
+        {% set icons = {'transport': 'T', 'weather': 'W', 'hotel': 'H'} %}
+        {% for name in ['transport', 'weather', 'hotel'] %}
+          {% set finding = (result.findings | selectattr('agent', 'equalto', name) | first) if result else none %}
+          <article class="agent-card">
+            <div class="agent-title"><span class="agent-icon">{{ icons[name] }}</span><div><h3>{{ name|title }}</h3><p>lookup_{{ name }}</p></div></div>
+            {% if finding %}
+              <span class="status {{ finding.status }}">{{ finding.status }}</span>
+              {% if finding.status == 'completed' %}<p>{{ finding.finding }}</p><code>{{ finding.source_id }}</code>
+              {% else %}<p>Verified evidence was unavailable. No fact was invented.</p>{% endif %}
+            {% else %}<p class="muted">Waiting for this agent to run.</p>{% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% if result %}
+    <section class="result-grid">
+      <article class="trace-card"><p class="eyebrow">Execution trace</p><h2>Team handoffs</h2><ol>{% for event in result.trace %}<li>{{ event }}</li>{% endfor %}</ol></article>
+      <article class="plan-card"><div class="plan-heading"><div><p class="eyebrow">Coordinator</p><h2>Travel plan</h2></div><span class="status {{ result.status }}">{{ result.status }}</span></div><p class="plan-text">{{ result.plan }}</p></article>
+    </section>
+    {% endif %}
+  </main>
+  <script>
+    document.getElementById('plan-form').addEventListener('submit', () => {
+      document.getElementById('submit-button').disabled = true;
+      document.getElementById('submit-button').textContent = 'Planning...';
+      document.getElementById('progress').hidden = false;
+    });
+  </script>
+</body>
+</html>

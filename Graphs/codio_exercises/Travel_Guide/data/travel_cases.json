@@ -1,0 +1,35 @@
+{
+  "berlin-conference": {
+    "title": "Berlin Conference",
+    "destination": "Berlin",
+    "disruption": "The original train was cancelled on the morning of departure.",
+    "request": "Find a safe, practical way to reach the conference and keep tonight's booking.",
+    "transport": {
+      "source_id": "TRN-201",
+      "claim": "ICE 612 departs at 09:40 and arrives in Berlin at 12:55. The existing ticket can be transferred at no charge."
+    },
+    "weather": {
+      "source_id": "WTH-310",
+      "claim": "Heavy rain is forecast after 15:00, but rail services and central Berlin roads remain open."
+    },
+    "hotel": {
+      "source_id": "HTL-115",
+      "claim": "The hotel confirmed the reservation and accepts late check-in until 23:00."
+    }
+  },
+  "coastal-workshop": {
+    "title": "Coastal Workshop",
+    "destination": "Brighton",
+    "disruption": "High winds have disrupted the original route and the traveller may arrive late.",
+    "request": "Create a cautious travel plan and identify anything that needs human confirmation.",
+    "transport": {
+      "source_id": "TRN-404",
+      "claim": "Direct trains are suspended. A rail-replacement coach leaves at 11:20 and is expected to arrive at 14:10."
+    },
+    "weather": {
+      "source_id": "WTH-512",
+      "claim": "An amber wind warning remains active until 16:00. Travellers should allow extra time and avoid the seafront."
+    },
+    "hotel": null
+  }
+}
