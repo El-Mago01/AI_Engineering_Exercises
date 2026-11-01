@@ -2,7 +2,6 @@ from openai import OpenAI
 import os
 from dotenv import load_dotenv
 load_dotenv()
-
 MODEL="gpt-4o-mini"
 # MODEL="text-embedding-3-small"
 # Initialize OpenAI client with the API key

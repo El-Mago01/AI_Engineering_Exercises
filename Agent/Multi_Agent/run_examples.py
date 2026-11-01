@@ -4,6 +4,7 @@ from openai import OpenAI
 from langgraph.graph import END, START, StateGraph
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 

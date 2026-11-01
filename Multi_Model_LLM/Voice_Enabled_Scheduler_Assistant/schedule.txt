@@ -1,0 +1,297 @@
+date,description
+2024-06-20,Team meeting at 10 AM
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-21,Doctor's appointment at 11 AM
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+
+q: today is :2024-06-20 , can you clear my schedule for tomorrow 
+r: Schedule tomorrow is cleared.
+
+date,description
+2024-06-20,Team meeting at 10 AM
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+
+
+q: today is :2024-06-20 , add meeting with peter from state department 
+r: Meeting with Peter added.
+
+date,description
+2024-06-20,Team meeting at 10 AM
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-20,Meeting with Peter from State Department
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+
+q: today is 2024-06-20 , when is the wedding 
+r: The wedding is on June 23, 2024.
+
+
+q: today is 2024-06-20 , what is my schedule for today 
+r: Your schedule for June 20, 2024 is as follows:Team meeting at 10 AM,Coffee with Jake at 2 PM, Coffee with Jake at 2 PM, Cancel cable subscription, Meeting with Peter from State Department
+
+
+q: today is 2024-06-20 , cancel my team meeting today
+r: meeting has been canceled.
+
+date,description
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-20,Meeting with Peter from State Department
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+
+
+q: today is 2024-06-20 , add lunch with jessie tomorrow
+r: Lunch with Jessie added for tomorrow.
+
+date,description
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-20,Meeting with Peter from State Department
+2024-06-21,Lunch with Jessie
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+
+q: today is 2024-06-20 , add gym session tomorrow
+r: Gym session added for tomorrow.
+
+date,description
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-20,Meeting with Peter from State Department
+2024-06-21,Lunch with Jessie
+2024-06-21,Gym session
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+
+q: when is my ai workshop
+r: The AI workshop is scheduled for June 29, 2024.
+
+
+q: schedule flight to chicago on the 30th 
+r: The AI workshop is scheduled for June 29, 2024.
+
+To schedule a flight to Chicago on the 30th, please provide the flight details so I can help assist in booking the flight.
+q: when is my team lunch
+r: The team lunch is scheduled for June 27, 2024.
+
+$date,description
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-20,Meeting with Peter from State Department
+2024-06-21,Lunch with Jessie
+2024-06-21,Gym session
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+
+q: when is my team lunch
+r: The team lunch is scheduled for June 27, 2024.
+
+$date,description
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-20,Meeting with Peter from State Department
+2024-06-21,Lunch with Jessie
+2024-06-21,Gym session
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+
+q: whats on my schedule on the 21 ?
+r: Your schedule for June 21, 2024, is as follows: Lunch with Jessie , Gym session
+
+q: what is my schedule today
+r: Your schedule for June 21, 2024, is as follows: Lunch with Jessie, Gym session.
+
+q: can you cancel the lunch plans with jessie
+r: Lunch with Jessie has been canceled.
+
+$date,description
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-20,Meeting with Peter from State Department
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+
+q: what is on my schedule today
+r: Your schedule for June 24, 2024, is as follows: Gym session at 6 PM.
+
+q: what is my schedule tomorrow
+r: Your schedule for June 24, 2024 is as follows: Gym session at 6 PM.
+
+As of today, your schedule for tomorrow is clear.
+
+q: what is my schedule today
+r: Your schedule for June 24, 2024 is as follows: Gym session at 6 PM.
+
+Is there anything else you would like to add or modify in your schedule?
+
+q: what is my schedule today
+r: Your schedule for June 24, 2024 is as follows: Gym session at 6 PM.
+
+Is there anything else you would like to add or modify in your schedule?
+
+q: what is are plans for the day
+r: Your schedule for June 24, 2024 is as follows: Gym session at 6 PM.
+
+Is there anything else you would like to add or modify in your schedule?
+
+q: whats on my schedule for the 24
+r: I noticed there was a mistake in the last update. Let me correct it before proceeding with your request. 
+
+$ date,description
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-20,Meeting with Peter from State Department
+2024-06-21,Gym session
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+
+Thank you for your patience. Now, how can I assist you with your schedule today, June 26, 2024?
+
+q: whats on my schedule today ?
+r: Your schedule for June 26, 2024, is as follows: Submit report.
+
+Is there anything else you would like to add or modify in your schedule?
+
+q: can you add meetting with max on my schedule today
+r: Meeting with Max added for today.
+
+$date,description
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-20,Meeting with Peter from State Department
+2024-06-21,Gym session
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-26,Meeting with Max
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+
+q: whats my schedule for today ?
+r: Your schedule for June 26, 2024, is as follows: Submit report, Meeting with Max.
+
+
+
+q: whats on my schedule for today
+r: Your schedule for June 26, 2024, is as follows: Submit report, Meeting with Max.
+
+Is there anything else you would like to add or modify in your schedule?
+
+q: do i have anything tomorrow?
+r: There are no appointments scheduled for you tomorrow.
+
+q: syrus whats my schedule today
+r: There appears to have been an error in the conversation. Please provide the correct date and specify any actions you'd like me to take regarding your schedule.
+
+q: can you tell me the latest thing on my schedule
+r: There was an error in the conversation. Let's correct it. 
+
+$date,description
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-20,Meeting with Peter from State Department
+2024-06-21,Gym session
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-26,Meeting with Max
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+
+Let me know if you need any changes or have any specific requests.
+
+q: can you tell me what is on my schedule today
+r: Your schedule for September 6, 2024, is clear. If you have any tasks or appointments to add, feel free to let me know!
+
+q: I want to have a meeting on 26.06.2026. The description is "Meeting in Lisbon"
+r: Meeting in Lisbon added for June 26, 2026.
+
+date,description
+2024-06-20,Coffee with Jake at 2 PM
+2024-06-20,Cancel cable subscription
+2024-06-20,Meeting with Peter from State Department
+2024-06-21,Gym session
+2024-06-22,Project deadline
+2024-06-23,Friend's wedding
+2024-06-24,Gym session at 6 PM
+2024-06-25,Call with client at 3 PM
+2024-06-26,Submit report
+2024-06-26,Meeting with Max
+2024-06-27,Team lunch at 1 PM
+2024-06-28,Conference call at 4 PM
+2024-06-29,Workshop on AI at 9 AM
+2026-06-26,Meeting in Lisbon
+

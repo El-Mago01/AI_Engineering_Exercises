@@ -14,6 +14,8 @@ api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
 MAX_SUMMARY_LENGTH = 20
 MODEL = "gpt-4o-mini"
+# MODEL = "gpt-5-mini"
+
 # MODEL = "gpt-4.1-mini"
 
 def chat_with_ai(message:str) -> str:
@@ -23,8 +25,8 @@ def chat_with_ai(message:str) -> str:
         messages=[{"role": "system",
                    "content": f"You task is to summarize the provided message in max {MAX_SUMMARY_LENGTH} words"},
                   {"role": "user", "content": message}],
-        temperature=0.8,
-        max_tokens=MAX_SUMMARY_LENGTH,
+        # temperature=0.8,
+        # max_tokens=MAX_SUMMARY_LENGTH,
     )
     dt2 = datetime.datetime.now()
     print(dt2 - dt1)

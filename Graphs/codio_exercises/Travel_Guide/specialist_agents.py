@@ -1,13 +1,12 @@
 """Tool-calling transport, weather, and hotel agent nodes."""
 
 import json
-
 from openai import OpenAI
 import os
-
 from team_state import AGENTS, MODEL, AgentProtocolError, TravelState
 from tools import TOOL_REGISTRY, tool_schema
 from dotenv import load_dotenv
+
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 
